@@ -2,11 +2,9 @@
 apiVersion: 1
 
 # list of datasources that should be deleted from the database
-# deleteDatasources:
-#  - name: Prometheus # Keep Prometheus if you still want it deleted/reprovisioned
-#    orgId: 1
-#  - name: Loki # Add Loki here if you need to ensure an old one is deleted first
-#    orgId: 1
+deleteDatasources:
+  - name: Prometheus
+    orgId: 1
 
 # list of datasources to insert/update depending
 # whats available in the database
@@ -34,7 +32,7 @@ datasources:
   # <string> basic auth password, if used
   basicAuthPassword:
   # <bool> enable/disable with credentials headers
-  withCredentials: false
+  withCredentials:
   # <bool> mark as default datasource. Max one per org
   isDefault: true
   # <map> fields that will be converted to json and stored in json_data
@@ -42,8 +40,6 @@ datasources:
      graphiteVersion: "1.1"
      tlsAuth: false
      tlsAuthWithCACert: false
-     # Add Prometheus-specific jsonData fields here if needed
-     # httpMethod: "POST" # Example
   # <string> json object of data that will be encrypted.
   secureJsonData:
     tlsCACert: "..."
@@ -52,22 +48,3 @@ datasources:
   version: 1
   # <bool> allow users to edit datasources from the UI.
   editable: true
-
-# Removed Loki Datasource section
-#- name: Loki
-#  type: loki
-#  access: proxy # Use proxy access mode
-#  url: http://loki:3100 # URL of the Loki service within the Docker network
-#  orgId: 1
-#  jsonData:
-#    # Optional: Define derived fields for better log exploration in Grafana
-#    # derivedFields:
-#    #   - datasourceUid: '<loki-datasource-uid>' # Replace with actual Loki datasource UID after Grafana creates it, if needed for linking
-#    #     matcherRegex: 'traceId=(\w+)'
-#    #     name: TraceID
-#    #     url: '$${__value.raw}'
-#    #     urlDisplayLabel: 'View Trace'
-#    maxLines: 1000 # Default maximum lines Grafana will request
-#  version: 1
-#  editable: true
-#  isDefault: false # Prometheus is already default
