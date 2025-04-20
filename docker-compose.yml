@@ -124,6 +124,7 @@ services:
     user: "472"
     depends_on:
       - prometheus
+      - loki # Added dependency on loki
     ports:
       - 3000:3000
     volumes:
@@ -154,13 +155,23 @@ services:
 #    networks:
 #      - back-tier
 
-  loki-worker:
+  loki: # Renamed from loki-worker
     image: grafana/loki:latest
-    volumes: # Added volumes section for persistence
+    ports: # Added ports section
+      - "3100:3100" # Expose Loki HTTP port
+    volumes:
       - loki_data:/loki
+      - ./loki:/etc/loki # Mount config directory
+    command: -config.file=/etc/loki/local-config.yaml -target=all # Added command
     networks:
       - back-tier
     restart: always
+    healthcheck: # Added healthcheck
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3100/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     deploy:
       resources:
         limits:
