@@ -3,6 +3,7 @@ version: '3.7'
 volumes:
     prometheus_data: {}
     grafana_data: {}
+    loki_data: {} # Added volume for Loki data
 
 networks:
   front-tier:
@@ -155,6 +156,8 @@ services:
 
   loki-worker:
     image: grafana/loki:latest
+    volumes: # Added volumes section for persistence
+      - loki_data:/loki
     networks:
       - back-tier
     restart: always
