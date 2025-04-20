@@ -162,7 +162,10 @@ services:
     volumes:
       - loki_data:/loki
       - ./loki:/etc/loki # Mount config directory
-    command: -config.file=/etc/loki/loki-config.yaml -target=all # Corrected config file path
+    command: # Added flag to disable structured metadata validation
+      - -config.file=/etc/loki/loki-config.yaml
+      - -target=all
+      - -validation.allow-structured-metadata=false
     networks:
       - back-tier
     restart: always
