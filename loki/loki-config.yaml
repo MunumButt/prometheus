@@ -1,21 +1,22 @@
-auth_enabled: false
+auth_enabled: false # Authentication is disabled
 
 server:
   http_listen_port: 3100
-  grpc_listen_port: 9096
+  grpc_listen_port: 9096 # Port for gRPC communication (used internally and by distributors/ingesters if scaled)
 
 common:
-  instance_addr: 127.0.0.1
-  path_prefix: /loki
+  instance_addr: 127.0.0.1 # Address to bind to for internal communication
+  path_prefix: /loki   # Directory prefix for storing Loki data within the volume
   storage:
-    filesystem:
+    filesystem: # Use the local filesystem for storage
       chunks_directory: /loki/chunks
       rules_directory: /loki/rules
-  replication_factor: 1
+  replication_factor: 1 # Only one copy of data needed for a single instance setup
   ring:
     kvstore:
-      store: inmemory
+      store: inmemory # Use in-memory ring for single instance setup (no coordination needed)
 
+# Optional: Configure query results caching for performance
 query_range:
   results_cache:
     cache:
@@ -25,23 +26,18 @@ query_range:
 
 schema_config:
   configs:
-    - from: 2020-10-24
-      store: boltdb-shipper
+    - from: 2020-10-24 # Use a recent schema version
+      store: boltdb-shipper # Recommended store for single instances, good performance for moderate loads
       object_store: filesystem
       schema: v11
       index:
         prefix: index_
-        period: 24h
-
-ruler:
-  alertmanager_url: http://localhost:9093 # This won't work as Alertmanager is disabled, but required by default config
-
-# Limits Configuration - Added to enable volume limits
-limits_config:
-  volume_enabled: true
+        period: 24h # How often to create a new index table (daily)
 
 # Disable features not strictly needed for single binary mode / local testing
 frontend_worker:
   frontend_address: '' # Disable frontend worker address resolution
-query_scheduler:
-  max_outstanding_requests_per_tenant: 2048 # Default value
+
+# Disable reporting anonymous usage data
+analytics:
+  reporting_enabled: false
