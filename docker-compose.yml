@@ -32,10 +32,17 @@ services:
     networks:
       - back-tier
     restart: always
-#    deploy:
+    deploy:
 #      placement:
 #        constraints:
 #          - node.hostname == ${HOSTNAME}
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 768M
+        reservations:
+          cpus: '0.20'
+          memory: 384M
 
   node-exporter:
     image: quay.io/prometheus/node-exporter:latest
@@ -44,9 +51,9 @@ services:
       - /sys:/host/sys:ro
       - /:/rootfs:ro
       - /:/host:ro,rslave
-    command: 
+    command:
       - '--path.rootfs=/host'
-      - '--path.procfs=/host/proc' 
+      - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
@@ -57,6 +64,13 @@ services:
     restart: always
     deploy:
       mode: global
+      resources:
+        limits:
+          cpus: '0.05'
+          memory: 128M
+        reservations:
+          cpus: '0.025'
+          memory: 64M
 
   alertmanager:
     image: prom/alertmanager
@@ -70,10 +84,18 @@ services:
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
-#    deploy:
+    deploy:
 #      placement:
 #        constraints:
 #          - node.hostname == ${HOSTNAME}
+      resources:
+        limits:
+          cpus: '0.05'
+          memory: 128M
+        reservations:
+          cpus: '0.025'
+          memory: 64M
+
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
     volumes:
@@ -88,6 +110,13 @@ services:
     restart: always
     deploy:
       mode: global
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 128M
+        reservations:
+          cpus: '0.05'
+          memory: 64M
 
   grafana:
     image: grafana/grafana
@@ -105,6 +134,14 @@ services:
       - back-tier
       - front-tier
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.20'
+          memory: 512M
+        reservations:
+          cpus: '0.10'
+          memory: 256M
 
 #  pushgateway:
 #    image: prom/pushgateway
@@ -121,3 +158,11 @@ services:
     networks:
       - back-tier
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.15'
+          memory: 256M
+        reservations:
+          cpus: '0.075'
+          memory: 128M
