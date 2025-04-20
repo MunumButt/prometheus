@@ -162,7 +162,7 @@ services:
     volumes:
       - loki_data:/loki
       - ./loki:/etc/loki # Mount config directory
-    command: -config.file=/etc/loki/local-config.yaml -target=all # Added command
+    command: -config.file=/etc/loki/loki-config.yaml -target=all # Corrected config file path
     networks:
       - back-tier
     restart: always
