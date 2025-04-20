@@ -3,7 +3,7 @@ version: '3.7'
 volumes:
     prometheus_data: {}
     grafana_data: {}
-    loki_data: {} # Added volume for Loki data
+    # loki_data: {} # Removed Loki volume
 
 networks:
   front-tier:
@@ -124,7 +124,7 @@ services:
     user: "472"
     depends_on:
       - prometheus
-      - loki # Added dependency on loki
+      # - loki # Removed dependency on loki
     ports:
       - 3000:3000
     volumes:
@@ -155,30 +155,31 @@ services:
 #    networks:
 #      - back-tier
 
-  loki: # Renamed from loki-worker
-    image: grafana/loki:latest
-    ports: # Added ports section
-      - "3100:3100" # Expose Loki HTTP port
-    volumes:
-      - loki_data:/loki
-      - ./loki:/etc/loki # Mount config directory
-    command: # Added validation flag back
-      - -config.file=/etc/loki/loki-config.yaml
-      - -validation.allow-structured-metadata=false
-    networks:
-      - back-tier
-    restart: always
-    healthcheck: # Added healthcheck
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3100/ready"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    deploy:
-      resources:
-        limits:
-          cpus: '0.15'
-          memory: 256M
-        reservations:
-          cpus: '0.075'
-          memory: 128M
+# Removed Loki service definition entirely
+#  loki:
+#    image: grafana/loki:latest
+#    ports:
+#      - "3100:3100"
+#    volumes:
+#      - loki_data:/loki
+#      - ./loki:/etc/loki
+#    command:
+#      - -config.file=/etc/loki/loki-config.yaml
+#      - -validation.allow-structured-metadata=false
+#    networks:
+#      - back-tier
+#    restart: always
+#    healthcheck:
+#      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3100/ready"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 3
+#      start_period: 10s
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.15'
+#          memory: 256M
+#        reservations:
+#          cpus: '0.075'
+#          memory: 128M

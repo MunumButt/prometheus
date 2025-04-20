@@ -53,21 +53,21 @@ datasources:
   # <bool> allow users to edit datasources from the UI.
   editable: true
 
-  # Add Loki Datasource
-- name: Loki
-  type: loki
-  access: proxy # Use proxy access mode
-  url: http://loki:3100 # URL of the Loki service within the Docker network
-  orgId: 1
-  jsonData:
-    # Optional: Define derived fields for better log exploration in Grafana
-    # derivedFields:
-    #   - datasourceUid: '<loki-datasource-uid>' # Replace with actual Loki datasource UID after Grafana creates it, if needed for linking
-    #     matcherRegex: 'traceId=(\w+)'
-    #     name: TraceID
-    #     url: '$${__value.raw}'
-    #     urlDisplayLabel: 'View Trace'
-    maxLines: 1000 # Default maximum lines Grafana will request
-  version: 1
-  editable: true
-  isDefault: false # Prometheus is already default
+# Removed Loki Datasource section
+#- name: Loki
+#  type: loki
+#  access: proxy # Use proxy access mode
+#  url: http://loki:3100 # URL of the Loki service within the Docker network
+#  orgId: 1
+#  jsonData:
+#    # Optional: Define derived fields for better log exploration in Grafana
+#    # derivedFields:
+#    #   - datasourceUid: '<loki-datasource-uid>' # Replace with actual Loki datasource UID after Grafana creates it, if needed for linking
+#    #     matcherRegex: 'traceId=(\w+)'
+#    #     name: TraceID
+#    #     url: '$${__value.raw}'
+#    #     urlDisplayLabel: 'View Trace'
+#    maxLines: 1000 # Default maximum lines Grafana will request
+#  version: 1
+#  editable: true
+#  isDefault: false # Prometheus is already default
