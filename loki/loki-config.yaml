@@ -36,6 +36,10 @@ schema_config:
 ruler:
   alertmanager_url: http://localhost:9093 # This won't work as Alertmanager is disabled, but required by default config
 
+# Limits Configuration - Added to enable volume limits
+limits_config:
+  volume_enabled: true
+
 # Disable features not strictly needed for single binary mode / local testing
 frontend_worker:
   frontend_address: '' # Disable frontend worker address resolution
